@@ -26,7 +26,7 @@ public class Game {
             coordinate = curPlayer.move(board, curPlayer);
             curPlayer = (curPlayer == p1) ? p2 : p1; // swap between players
             board.printBoard(); // print the board so the players know what it looks like
-            // check if somebody won
+            // check if somebody won if not repeat the prcess
         } while (!board.checkWinner(coordinate));
     }
 }

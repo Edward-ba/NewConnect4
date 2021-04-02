@@ -79,7 +79,11 @@ public class Board {
         int maxP2PiecesInARow = 0;
 
         for (int i = coordinate.r; i < Math.min(numOfRows, coordinate.r + 4); ++i) {
-            if (this.grid[i][coordinate.c].getPlayerNumber() == Player.PlayerNumber.Player1) {
+            if (null == this.grid[i][coordinate.c]) {
+                p1PiecesInARow = 0;
+                p2PiecesInARow = 0;
+            }
+            else if (this.grid[i][coordinate.c].getPlayerNumber() == Player.PlayerNumber.Player1) {
                 p1PiecesInARow += 1;
                 p2PiecesInARow = 0;
                 if (p1PiecesInARow > maxP1PiecesInARow)
@@ -91,57 +95,26 @@ public class Board {
                 if (p2PiecesInARow > maxP2PiecesInARow)
                     maxP2PiecesInARow = p2PiecesInARow;
             }
-            else {
-                p1PiecesInARow = 0;
-                p2PiecesInARow = 0;
-            }
         }
 
         // initialize the variable to return
-        int ret;
+        int ret = 0;
 
-        if (maxP1PiecesInARow >= 4)
+        if (maxP1PiecesInARow >= 4) // return 1 if player one wins
             ret = 1;
-        else if (maxP2PiecesInARow >= 4)
+        else if (maxP2PiecesInARow >= 4) // return 2 if player two wins
             ret = 2;
-        else
-            ret = 0;
 
         return ret;
     }
 
-    public boolean checkWinner(Coordinate coordinate) {
-
-        int vertical = checkWinnerVertical(coordinate);
-
+    public int checkWinnerHorizontal(Coordinate coordinate) {
         int p1PiecesInARow = 0;
         int p2PiecesInARow = 0;
         int maxP1PiecesInARow = 0;
         int maxP2PiecesInARow = 0;
 
-        for (int i = coordinate.r; i < Math.min(numOfRows, coordinate.r + 4); ++i) {
-            if (this.grid[i][coordinate.c].getPlayerNumber() == Player.PlayerNumber.Player1) {
-                p1PiecesInARow += 1;
-                p2PiecesInARow = 0;
-                if (p1PiecesInARow > maxP1PiecesInARow)
-                    maxP1PiecesInARow = p1PiecesInARow;
-            }
-            else if (this.grid[i][coordinate.c].getPlayerNumber() == Player.PlayerNumber.Player2) {
-                p2PiecesInARow += 1;
-                p1PiecesInARow = 0;
-                if (p2PiecesInARow > maxP2PiecesInARow)
-                    maxP2PiecesInARow = p2PiecesInARow;
-            }
-            else {
-                p1PiecesInARow = 0;
-                p2PiecesInARow = 0;
-            }
-        }
-
-        p1PiecesInARow = 0;
-        p2PiecesInARow = 0;
-
-        for (int i = Math.max(coordinate.c - 4, 0); i < Math.min(coordinate.c + 4, numOfCols); ++i) {
+        for (int i = Math.max(0, coordinate.c - 4); i < Math.min(numOfCols, coordinate.c + 4); ++i) {
             if (null == grid[coordinate.r][i]) {
                 p1PiecesInARow = 0;
                 p2PiecesInARow = 0;
@@ -160,20 +133,39 @@ public class Board {
             }
         }
 
+        // initialize the variable to return
+        int ret = 0;
+
+        if (maxP1PiecesInARow >= 4) // return 1 if player one wins
+            ret = 1;
+        else if (maxP2PiecesInARow >= 4) // return 2 if player two wins
+            ret = 2;
+
+        return ret;
+    }
+
+    public int checkWinnerDownRightDiagonal(Coordinate coordinate) {
+        int p1PiecesInARow = 0;
+        int p2PiecesInARow = 0;
+        int maxP1PiecesInARow = 0;
+        int maxP2PiecesInARow = 0;
+
+        // create the coordinate where we start then move down and right from
         Coordinate start = new Coordinate();
         for (int i = 0; i < 5; ++i) {
             if (coordinate.r - (4 - i) >= 0 && coordinate.c - (4 - i) >= 0) {
-                start.r = coordinate.r - (4 - i);
-                start.c = coordinate.c - (4 - i);
+                start.r = coordinate.r - 4 + i;
+                start.c = coordinate.c - 4 + i;
                 break;
             }
         }
 
+        // create the end coordinate for where we stop going down right from the start coordinate
         Coordinate end = new Coordinate();
         for (int i = 0; i < 5; ++i) {
             if (coordinate.r + (4 - i) < numOfRows && coordinate.c + (4 - i) < numOfCols) {
-                end.r = coordinate.r + (4 - i);
-                end.c = coordinate.c + (4 - i);
+                end.r = coordinate.r + 4 - i;
+                end.c = coordinate.c + 4 - i;
                 break;
             }
         }
@@ -199,18 +191,39 @@ public class Board {
             start.c += 1;
         }
 
+        // initialize the variable to return
+        int ret = 0;
+
+        if (maxP1PiecesInARow >= 4) // return 1 if player one wins
+            ret = 1;
+        else if (maxP2PiecesInARow >= 4) // return 2 if player two wins
+            ret = 2;
+
+        return ret;
+    }
+
+    public int checkWinnerDownLeftDiagonal(Coordinate coordinate) {
+        int p1PiecesInARow = 0;
+        int p2PiecesInARow = 0;
+        int maxP1PiecesInARow = 0;
+        int maxP2PiecesInARow = 0;
+
+        // create the coordinate where we start then move down and left from
+        Coordinate start = new Coordinate();
         for (int i = 0; i < 5; ++i) {
-            if (coordinate.r - (4 - i) >= 0 && coordinate.c + (4 - i) < numOfCols) {
-                start.r = coordinate.r - (4 - i);
-                start.c = coordinate.c + (4 - i);
+            if (coordinate.r - 4 + i >= 0 && coordinate.c + 4 - i < numOfCols) {
+                start.r = coordinate.r - 4 + i;
+                start.c = coordinate.c + 4 - i;
                 break;
             }
         }
 
+        // create the end coordinate for where we stop going down and right from the start coordinate
+        Coordinate end = new Coordinate();
         for (int i = 0; i < 5; ++i) {
-            if (coordinate.r + (4 - i) < numOfRows && coordinate.c - (4 - i) >= 0) {
-                end.r = coordinate.r + (4 - i);
-                end.c = coordinate.c - (4 - i);
+            if (coordinate.r + 4 - i < numOfRows && coordinate.c - 4 + i >= 0) {
+                end.r = coordinate.r + 4 - i;
+                end.c = coordinate.c - 4 + i;
                 break;
             }
         }
@@ -236,12 +249,31 @@ public class Board {
             start.c -= 1;
         }
 
-        if (maxP1PiecesInARow >= 4) {
-            System.out.println("Player 1 wins");
+        // initialize the variable to return
+        int ret = 0;
+
+        if (maxP1PiecesInARow >= 4) // return 1 if player one wins
+            ret = 1;
+        else if (maxP2PiecesInARow >= 4) // return 2 if player two wins
+            ret = 2;
+
+        return ret;
+    }
+
+
+        public boolean checkWinner(Coordinate coordinate) {
+
+        int vertical = checkWinnerVertical(coordinate);
+        int horizontal = checkWinnerHorizontal(coordinate);
+        int downRightDiagonal = checkWinnerDownRightDiagonal(coordinate);
+        int downLeftDiagonal = checkWinnerDownLeftDiagonal(coordinate);
+
+        if (vertical == 1 || horizontal == 1 || downRightDiagonal == 1 || downLeftDiagonal == 1) {
+            System.out.println("Player one wins!");
             return true;
         }
-        else if (maxP2PiecesInARow >= 4) {
-            System.out.println("Player 2 wins");
+        else if (vertical == 2 || horizontal == 2 || downRightDiagonal == 2 || downLeftDiagonal == 2) {
+            System.out.println("Player two wins!");
             return true;
         }
         return false;
