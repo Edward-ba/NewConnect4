@@ -152,20 +152,20 @@ public class Board {
 
         // create the coordinate where we start then move down and right from
         Coordinate start = new Coordinate();
-        for (int i = 0; i < 5; ++i) {
-            if (coordinate.r - (4 - i) >= 0 && coordinate.c - (4 - i) >= 0) {
-                start.r = coordinate.r - 4 + i;
-                start.c = coordinate.c - 4 + i;
+        for (int i = 4; i >= 0; --i) {
+            if (coordinate.r - i >= 0 && coordinate.c - i >= 0) {
+                start.r = coordinate.r - i;
+                start.c = coordinate.c - i;
                 break;
             }
         }
 
         // create the end coordinate for where we stop going down right from the start coordinate
         Coordinate end = new Coordinate();
-        for (int i = 0; i < 5; ++i) {
-            if (coordinate.r + (4 - i) < numOfRows && coordinate.c + (4 - i) < numOfCols) {
-                end.r = coordinate.r + 4 - i;
-                end.c = coordinate.c + 4 - i;
+        for (int i = 4; i >= 0; --i) {
+            if (coordinate.r + i < numOfRows && coordinate.c + i < numOfCols) {
+                end.r = coordinate.r + i;
+                end.c = coordinate.c + i;
                 break;
             }
         }
