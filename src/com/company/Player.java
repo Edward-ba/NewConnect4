@@ -23,10 +23,6 @@ public class Player {
         Player2,
     }
 
-    public PlayerNumber getPlayerNumber() {
-        return playerNumber;
-    }
-
     public Player(PlayerNumber pt) {
         this.playerNumber = pt;
     }
